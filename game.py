@@ -12,6 +12,13 @@ class Game():
         self.deck = Deck()
         self.deck.shuffle()
 
+        self.player1 = Player()
+        self.player2 = Player()
+        self.currentPlayer = random.choice[self.player1, self.player2]
+        for i in range(7):
+            self.deck.draw(self.player1)
+            self.deck.draw(self.player2)
+
 
 class Deck():
     
