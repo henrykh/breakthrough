@@ -12,12 +12,19 @@ class Game():
         self.deck = Deck()
         self.deck.shuffle()
 
+        # Init players, pick start player
         self.player1 = Player()
         self.player2 = Player()
         self.currentPlayer = random.choice[self.player1, self.player2]
+
+        # Deal hands
         for i in range(7):
             self.deck.draw(self.player1)
             self.deck.draw(self.player2)
+
+        # initialize flags, flag control tracking
+        self.flags = [[] for i in range(7)]
+        self.flag_control = []*7
 
 
 class Deck():
@@ -48,3 +55,9 @@ class Card():
 class Hand():
     def __init__(self):
         self._hand = []
+
+
+
+if __name__ == "__main__":
+    game = Game()
+
