@@ -1,6 +1,18 @@
 import random
 
 
+class Player():
+    def __init__(self):
+        self.hand = Hand()
+
+
+class Game():
+
+    def __init__(self):
+        self.deck = Deck()
+        self.deck.shuffle()
+
+
 class Deck():
     
     def __init__(self):
@@ -9,8 +21,9 @@ class Deck():
                                        "blue", "purple",
                                        "yellow", "orange"] ]
 
-    def draw(self):
-        return self._deck.pop()
+    def draw(self, player):
+        card = self._deck.pop()
+        player.hand.append(card)
 
     def shuffle(self):
         random.shuffle(self._deck)
@@ -23,3 +36,8 @@ class Card():
 
     def __str__(self):
         return "{} {}".format(self.val, self.color)
+
+
+class Hand():
+    def __init__(self):
+        self._hand = []
