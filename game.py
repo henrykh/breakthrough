@@ -1,12 +1,13 @@
 import random
 
 
-class Player():
-    def __init__(self):
+class Player(object):
+    def __init__(self, playerNumber):
         self.hand = []
+        self.playerNumber = playerNumber
 
 
-class Game():
+class Game(object):
 
     def __init__(self):
         self.won = False
@@ -14,8 +15,8 @@ class Game():
         self.deck.shuffle()
 
         # Init players, pick start player
-        self.player1 = Player()
-        self.player2 = Player()
+        self.player1 = Player(0)
+        self.player2 = Player(1)
         self.currentPlayer = random.choice([self.player1, self.player2])
 
         # Deal hands
@@ -27,6 +28,50 @@ class Game():
         self.flags = [[[], []] for i in range(7)]
         self.flag_control = []*7
 
+    def run_game(self):
+        while(not self.won):
+            print "{}'s Turn".format(self.currentPlayer)
+            flag = input("Where would you like to play (Enter a flag number, 1-7)? ")
+            played_card = input("Which card would you like to play (Enter 'hand' to see your cards)? ")
+            if played_card == 'hand':
+                print self.currentPlayer.hand
+                played_card = input("Which card would you like to play (Enter 'hand' to see your cards)? ")
+            self.currentPlayer.playCard(flag, played_card)
+
+
+    # TODO: clean up the logic here, reduce redundancy
+    def playCard(self, flag, played_card):
+        # is the card in the players hand
+        # how to validate their input ?
+        if played_card not in self.currentPlayer.hand:
+            played_card = input("Hmm you don't have that card. Try again (Enter 'hand' to see your cards)? ")
+            self.playCard(flag, played_card)
+
+        # make sure the flag number is in the correct range
+        elif flag not in range(1,8):
+            flag = input("Not a valid flag. Try again (Enter a number, 1-7) ")
+            self.playCard(flag, played_card)
+
+        # make sure the flag hasn't already been claimed
+        elif self.flag_control[flag]:
+            flag = input("That flag has already been taken. Try again (Enter a number, 1-7")
+            self.playCard(flag, played_card)
+
+        # make sure the player hasn't already played three cards there
+        elif len(self.flags[flag][self.currentPlayer.playerNumber]) == 3:
+            flag = input("You have already placed three cards there. Try again (Enter a number, 1-7")
+            self.playCard(flag, played_card)
+        else:
+            # remove the card from the player's hand
+            self.currentPlayer.hand.remove(played_card)
+
+
+    # current player draws
+    # switch active player
+    # check game end
+    def endTurn(self):
+        pass
+
     # print out the board state
     def display(self):
         for flag in self.flags:
@@ -34,7 +79,7 @@ class Game():
                 print " ".join(stack) + " | "
 
 
-class Deck():
+class Deck(object):
 
     def __init__(self):
         self._deck = [Card(val, color) for val in range(1, 11)
@@ -50,7 +95,7 @@ class Deck():
         random.shuffle(self._deck)
 
 
-class Card():
+class Card(object):
     def __init__(self, val, color):
         self.val = val
         self.color = color
