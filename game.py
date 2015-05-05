@@ -70,7 +70,14 @@ class Game(object):
     # switch active player
     # check game end
     def endTurn(self):
-        pass
+        self.deck.draw(self.currentPlayer)
+
+        # make this better
+        if self.currentPlayer == self.player1:
+            self.currentPlayer = self.player2
+        else:
+            self.currentPlayer = self.player1
+
 
     # print out the board state
     def display(self):
