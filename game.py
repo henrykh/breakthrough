@@ -35,13 +35,13 @@ class Game(object):
         self.flag_control = []*7
 
     def run_game(self):
-        while(not self.won):
+        while not self.won:
             print "{}'s Turn".format(self.currentPlayer)
-            flag = input("Where would you like to play (Enter a flag number, 1-7)? ")
-            played_card = input("Which card would you like to play (Enter 'hand' to see your cards)? ")
+            flag = raw_input("Where would you like to play (Enter a flag number, 1-7)? ")
+            played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
             if played_card == 'hand':
                 print self.currentPlayer.hand
-                played_card = input("Which card would you like to play (Enter 'hand' to see your cards)? ")
+                played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
             self.currentPlayer.playCard(flag, played_card)
 
 
@@ -50,22 +50,22 @@ class Game(object):
         # is the card in the players hand
         # how to validate their input ?
         if played_card not in self.currentPlayer.hand:
-            played_card = input("Hmm you don't have that card. Try again (Enter 'hand' to see your cards)? ")
+            played_card = raw_input("Hmm you don't have that card. Try again (Enter 'hand' to see your cards)? ")
             self.playCard(flag, played_card)
 
         # make sure the flag number is in the correct range
-        elif flag not in range(1,8):
-            flag = input("Not a valid flag. Try again (Enter a number, 1-7) ")
+        elif flag not in range(1, 8):
+            flag = raw_input("Not a valid flag. Try again (Enter a number, 1-7) ")
             self.playCard(flag, played_card)
 
         # make sure the flag hasn't already been claimed
         elif self.flag_control[flag]:
-            flag = input("That flag has already been taken. Try again (Enter a number, 1-7")
+            flag = raw_input("That flag has already been taken. Try again (Enter a number, 1-7")
             self.playCard(flag, played_card)
 
         # make sure the player hasn't already played three cards there
         elif len(self.flags[flag][self.currentPlayer.playerNumber-1]) == 3:
-            flag = input("You have already placed three cards there. Try again (Enter a number, 1-7")
+            flag = raw_input("You have already placed three cards there. Try again (Enter a number, 1-7")
             self.playCard(flag, played_card)
         else:
             # remove the card from the player's hand
@@ -121,3 +121,4 @@ class Card(object):
 
 if __name__ == "__main__":
     game = Game()
+    game.run_game()
