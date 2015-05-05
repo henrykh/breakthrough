@@ -37,12 +37,17 @@ class Game(object):
     def run_game(self):
         while not self.won:
             print "{}'s Turn".format(self.currentPlayer)
-            flag = raw_input("Where would you like to play (Enter a flag number, 1-7)? ")
-            played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
-            if played_card == 'hand':
-                print self.currentPlayer.hand
-                played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
-            self.currentPlayer.playCard(flag, played_card)
+
+            valid_move = False
+            while not valid_move:
+                flag = raw_input(
+                    "Where would you like to play (Enter a flag number, 1-7)? ")
+                played_card = raw_input(
+                    "Which card would you like to play (Enter 'hand' to see your cards)? ")
+                if played_card == 'hand':
+                    print self.currentPlayer.hand
+                    # played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
+                self.currentPlayer.playCard(flag, played_card)
 
 
     # TODO: clean up the logic here, reduce redundancy
@@ -69,6 +74,7 @@ class Game(object):
             self.playCard(flag, played_card)
         else:
             # remove the card from the player's hand
+            valid_move = True
             self.currentPlayer.hand.remove(played_card)
 
 
