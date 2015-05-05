@@ -6,6 +6,12 @@ class Player(object):
         self.hand = []
         self.playerNumber = playerNumber
 
+    def __str__(self):
+        return "Player " + str(self.playerNumber)
+
+    def __repr__(self):
+        return self.__str__()
+
 
 class Game(object):
 
@@ -15,8 +21,8 @@ class Game(object):
         self.deck.shuffle()
 
         # Init players, pick start player
-        self.player1 = Player(0)
-        self.player2 = Player(1)
+        self.player1 = Player(1)
+        self.player2 = Player(2)
         self.currentPlayer = random.choice([self.player1, self.player2])
 
         # Deal hands
@@ -58,7 +64,7 @@ class Game(object):
             self.playCard(flag, played_card)
 
         # make sure the player hasn't already played three cards there
-        elif len(self.flags[flag][self.currentPlayer.playerNumber]) == 3:
+        elif len(self.flags[flag][self.currentPlayer.playerNumber-1]) == 3:
             flag = input("You have already placed three cards there. Try again (Enter a number, 1-7")
             self.playCard(flag, played_card)
         else:
