@@ -52,6 +52,7 @@ class Game(object):
 
     # TODO: clean up the logic here, reduce redundancy
     def playCard(self, flag, played_card):
+        currentPlayersSide = self.flags[flag][self.currentPlayer.playerNumber-1]
         # is the card in the players hand
         # how to validate their input ?
         if played_card not in self.currentPlayer.hand:
@@ -69,14 +70,18 @@ class Game(object):
             self.playCard(flag, played_card)
 
         # make sure the player hasn't already played three cards there
-        elif len(self.flags[flag][self.currentPlayer.playerNumber-1]) == 3:
+        elif len(currentPlayersSide) == 3:
             flag = raw_input("You have already placed three cards there. Try again (Enter a number, 1-7")
             self.playCard(flag, played_card)
         else:
             # remove the card from the player's hand
             valid_move = True
             self.currentPlayer.hand.remove(played_card)
-            self.flags[flag][self.currentPlayer.playerNumber-1].append(played_card)
+
+            currentPlayersSide.append(played_card)
+            if len(currentPlayersSide) == 3:
+                self.check_flag_control(self.flags[flag])
+
 
 
     # current player draws
@@ -99,6 +104,9 @@ class Game(object):
         for flag in self.flags:
             for stack in flag:
                 print " ".join(stack) + " | "
+
+    def check_flag_control(flag):
+        player_1_side, player_2_side = flag[0], flag[1]
 
 
 class Deck(object):
