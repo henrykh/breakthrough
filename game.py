@@ -105,9 +105,18 @@ class Game(object):
             for stack in flag:
                 print " ".join(stack) + " | "
 
-    def check_flag_control(flag):
+    def check_flag_control(self, flag):
         player_1_side, player_2_side = flag[0], flag[1]
+        if len(player_1_side) == 3 and len(player_2_side) == 3:
+            self.get_side_strength(player_1_side)
 
+
+    # give side a numerical value for comparison
+    def get_side_strength(self, side):
+        pass
+        # check for flush
+        # check for 3 of a kind
+        # check for straight
 
 class Deck(object):
 
