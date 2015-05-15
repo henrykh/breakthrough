@@ -31,8 +31,8 @@ class Game(object):
             self.deck.draw(self.player2)
 
         # initialize flags, flag control tracking
-        self.flags = [[[], []] for i in range(7)]
-        self.flag_control = []*7
+        self.flags = [([], []) for i in range(7)]
+        self.flag_control = [None for i in range(7)]
 
     def run_game(self):
         while not self.won:
@@ -76,6 +76,7 @@ class Game(object):
             # remove the card from the player's hand
             valid_move = True
             self.currentPlayer.hand.remove(played_card)
+            self.flags[flag][self.currentPlayer.playerNumber-1].append(played_card)
 
 
     # current player draws
@@ -89,6 +90,8 @@ class Game(object):
             self.currentPlayer = self.player2
         else:
             self.currentPlayer = self.player1
+
+        # Check if game is over
 
 
     # print out the board state
