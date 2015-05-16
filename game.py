@@ -113,10 +113,25 @@ class Game(object):
 
     # give side a numerical value for comparison
     def get_side_strength(self, side):
-        pass
-        # check for flush
-        # check for 3 of a kind
-        # check for straight
+        strength = 0
+        side.sort(key=lambda x: x.val)
+
+        # get sum of side
+        for card in side:
+            strength += card.val
+
+        # is straight?
+        if side[1].val == side[0].val + 1 and side[2].val == side[1].val + 1:
+            strength += 100
+
+        # is flush?
+        if side[0].color == side[1].color == side[2].color:
+            strength += 200
+
+        # is three of a kind
+        elif side[0].val == side[1].val == side[2].val:
+            strength += 250
+
 
 
 class Deck(object):
