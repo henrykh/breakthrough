@@ -80,8 +80,9 @@ class Game(object):
 
             currentPlayersSide.append(played_card)
             if len(currentPlayersSide) == 3:
-                self.check_flag_control(self.flags[flag])
-
+                winner = self.check_flag_control(self.flags[flag])
+                if winner:
+                    self.flag_control[flag] = winner
 
 
     # current player draws
@@ -108,8 +109,15 @@ class Game(object):
     def check_flag_control(self, flag):
         player_1_side, player_2_side = flag[0], flag[1]
         if len(player_1_side) == 3 and len(player_2_side) == 3:
-            self.get_side_strength(player_1_side)
-
+            if(self.get_side_strength(player_1_side) > (
+               self.get_side_strength(player_2_side))):
+                return self.player1
+            # bugged when sides are equal
+            else:
+                return self.player2
+        else:
+            # if one player has fewer than three can it be claimed?
+            pass
 
     # give side a numerical value for comparison
     def get_side_strength(self, side):
@@ -132,6 +140,7 @@ class Game(object):
         elif side[0].val == side[1].val == side[2].val:
             strength += 250
 
+        return strength
 
 
 class Deck(object):
