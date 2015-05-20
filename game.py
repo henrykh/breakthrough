@@ -40,15 +40,19 @@ class Game(object):
 
             valid_move = False
             while not valid_move:
-                flag = int(raw_input(
-                    "Where would you like to play (Enter a flag number, 1-7)? "))
+                flag = None
+                while not flag or flag == 'display':
+                    flag = raw_input(
+                        "Where would you like to play (Enter a flag number, 1-7)? ")
+                    if flag == 'display':
+                        self.display()
+                flag = int(flag)
                 played_card = ""
                 while not played_card or played_card == 'hand':
                     played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)?")
                     if played_card == 'hand':
                         print self.currentPlayer.hand
-                    # played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
-                self.playCard(flag, played_card)
+                valid_move = self.playCard(flag, played_card)
 
             self.endTurn()
 
@@ -57,12 +61,16 @@ class Game(object):
         currentPlayersSide = self.flags[flag][self.currentPlayer.playerNumber-1]
         # is the card in the players hand
         # how to validate their input ?
-        if played_card not in self.currentPlayer.hand:
+        for card in self.currentPlayer.hand:
+            if played_card == card.__str__():
+                played_card = card
+                break
+        else:
             played_card = raw_input("Hmm you don't have that card. Try again (Enter 'hand' to see your cards)? ")
-            self.playCard(flag, played_card)
+            return self.playCard(flag, played_card)
 
         # make sure the flag number is in the correct range
-        elif flag not in range(1, 8):
+        if flag not in range(1, 8):
             flag = raw_input("Not a valid flag. Try again (Enter a number, 1-7) ")
             self.playCard(flag, played_card)
 
@@ -77,7 +85,6 @@ class Game(object):
             self.playCard(flag, played_card)
         else:
             # remove the card from the player's hand
-            valid_move = True
             self.currentPlayer.hand.remove(played_card)
 
             currentPlayersSide.append(played_card)
@@ -85,7 +92,7 @@ class Game(object):
                 winner = self.check_flag_control(self.flags[flag])
                 if winner:
                     self.flag_control[flag] = winner
-
+            return True
 
     # current player draws
     # switch active player
@@ -106,6 +113,7 @@ class Game(object):
     def display(self):
         for flag in self.flags:
             for stack in flag:
+                import pdb; pdb.set_trace()
                 print " ".join(stack) + " | "
 
     def check_flag_control(self, flag):
