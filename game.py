@@ -40,15 +40,17 @@ class Game(object):
 
             valid_move = False
             while not valid_move:
-                flag = raw_input(
-                    "Where would you like to play (Enter a flag number, 1-7)? ")
-                played_card = raw_input(
-                    "Which card would you like to play (Enter 'hand' to see your cards)? ")
-                if played_card == 'hand':
-                    print self.currentPlayer.hand
+                flag = int(raw_input(
+                    "Where would you like to play (Enter a flag number, 1-7)? "))
+                played_card = ""
+                while not played_card or played_card == 'hand':
+                    played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)?")
+                    if played_card == 'hand':
+                        print self.currentPlayer.hand
                     # played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
-                self.currentPlayer.playCard(flag, played_card)
+                self.playCard(flag, played_card)
 
+            self.endTurn()
 
     # TODO: clean up the logic here, reduce redundancy
     def playCard(self, flag, played_card):
