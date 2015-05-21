@@ -38,23 +38,10 @@ class Game(object):
         while not self.won:
             print "{}'s Turn".format(self.currentPlayer)
 
-
             # flag selection
             valid_move = False
             while not valid_move:
-                flag = None
-
-                while flag is None or flag == 'display':
-                    flag = raw_input(
-                        "Where would you like to play (Enter a flag number, 1-7)? ")
-                    if flag == 'display':
-                        self.display()
-                    else:
-                        try:
-                            flag = int(flag) - 1
-                        except ValueError:
-                            flag = None
-                            print "Flag must be a number between 1-7"
+                flag = self.flagValid()
 
                 # card selection
                 played_card = ""
@@ -65,6 +52,38 @@ class Game(object):
                 valid_move = self.playCard(flag, played_card)
 
             self.endTurn()
+
+    def flagValid(self):
+        flag = None
+
+        while flag is None or flag == 'display' or flag == 'hand':
+            flag = raw_input(
+                "Where would you like to play (Enter a flag number 1-7 or type 'display' to show the field or 'hand' to show your hand)? ")
+            if flag == 'display':
+                self.display()
+            elif flag == 'hand':
+                print self.currentPlayer.hand
+            else:
+                try:
+                    flag = int(flag) - 1
+                except ValueError:
+                    flag = None
+                    print "Flag must be a number between 1-7"
+                    continue
+
+                if flag not in range(0, 7):
+                    flag = None
+                    print "Not a valid flag."
+                elif self. flag_control[flag]:
+                    flag = None
+                    print "That flag has already been taken."
+                elif len(self.flags[flag][self.currentPlayer.playerNumber-1]) == 3:
+                    flag = None
+                    print "You have already placed three cards there."
+
+        return flag
+
+
 
     # TODO: clean up the logic here, reduce redundancy
     def playCard(self, flag, played_card):
