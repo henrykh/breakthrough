@@ -85,7 +85,7 @@ class Game(object):
                 print self.currentPlayer.hand
             else:
                 for card in self.currentPlayer.hand:
-                    if played_card == card.__str__():
+                    if played_card.upper() == card.__str__():
                         played_card = card
                         break
                 else:
@@ -97,7 +97,7 @@ class Game(object):
     # TODO: clean up the logic here, reduce redundancy
     def playCard(self, flag, played_card):
         currentPlayersSide = self.flags[flag][self.currentPlayer.playerNumber-1]
-       
+
         self.currentPlayer.hand.remove(played_card)
 
         currentPlayersSide.append(played_card)
@@ -120,9 +120,9 @@ class Game(object):
 
         # Check if game is over
 
-
     # print out the board state
     def display(self):
+        print self.player1.__str__() + " | " + self.player2.__str__()
         for flag in self.flags:
             print flag[0].__str__() + " | " + flag[1].__str__()
 
