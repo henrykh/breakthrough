@@ -46,10 +46,10 @@ class Game(object):
                         "Where would you like to play (Enter a flag number, 1-7)? ")
                     if flag == 'display':
                         self.display()
-                flag = int(flag)
+                flag = int(flag) - 1
                 played_card = ""
                 while not played_card or played_card == 'hand':
-                    played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)?")
+                    played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
                     if played_card == 'hand':
                         print self.currentPlayer.hand
                 valid_move = self.playCard(flag, played_card)
@@ -70,19 +70,19 @@ class Game(object):
             return self.playCard(flag, played_card)
 
         # make sure the flag number is in the correct range
-        if flag not in range(1, 8):
+        if flag not in range(0, 7):
             flag = raw_input("Not a valid flag. Try again (Enter a number, 1-7) ")
-            self.playCard(flag, played_card)
+            return self.playCard(flag, played_card)
 
         # make sure the flag hasn't already been claimed
         elif self.flag_control[flag]:
             flag = raw_input("That flag has already been taken. Try again (Enter a number, 1-7")
-            self.playCard(flag, played_card)
+            return self.playCard(flag, played_card)
 
         # make sure the player hasn't already played three cards there
         elif len(currentPlayersSide) == 3:
             flag = raw_input("You have already placed three cards there. Try again (Enter a number, 1-7")
-            self.playCard(flag, played_card)
+            return self.playCard(flag, played_card)
         else:
             # remove the card from the player's hand
             self.currentPlayer.hand.remove(played_card)
@@ -112,9 +112,7 @@ class Game(object):
     # print out the board state
     def display(self):
         for flag in self.flags:
-            for stack in flag:
-                import pdb; pdb.set_trace()
-                print " ".join(stack) + " | "
+            print flag[0].__str__() + " | " + flag[1].__str__()
 
     def check_flag_control(self, flag):
         player_1_side, player_2_side = flag[0], flag[1]
