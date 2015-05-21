@@ -39,17 +39,11 @@ class Game(object):
             print "{}'s Turn".format(self.currentPlayer)
 
             # flag selection
-            valid_move = False
-            while not valid_move:
-                flag = self.flagValid()
+            flag = self.flagValid()
+            # card selection
+            card = self.cardValid()
 
-                # card selection
-                played_card = ""
-                while not played_card or played_card == 'hand':
-                    played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
-                    if played_card == 'hand':
-                        print self.currentPlayer.hand
-                valid_move = self.playCard(flag, played_card)
+            self.playCard(flag, card)
 
             self.endTurn()
 
@@ -83,45 +77,34 @@ class Game(object):
 
         return flag
 
+    def cardValid(self):
+        played_card = ""
+        while not played_card or played_card == 'hand':
+            played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
+            if played_card == 'hand':
+                print self.currentPlayer.hand
+            else:
+                for card in self.currentPlayer.hand:
+                    if played_card == card.__str__():
+                        played_card = card
+                        break
+                else:
+                    print "Hmm you don't have that card..."
+                    played_card = None
 
+        return played_card
 
     # TODO: clean up the logic here, reduce redundancy
     def playCard(self, flag, played_card):
         currentPlayersSide = self.flags[flag][self.currentPlayer.playerNumber-1]
-        # is the card in the players hand
-        # how to validate their input ?
-        for card in self.currentPlayer.hand:
-            if played_card == card.__str__():
-                played_card = card
-                break
-        else:
-            played_card = raw_input("Hmm you don't have that card. Try again (Enter 'hand' to see your cards)? ")
-            return self.playCard(flag, played_card)
+       
+        self.currentPlayer.hand.remove(played_card)
 
-        # make sure the flag number is in the correct range
-        if flag not in range(0, 7):
-            flag = raw_input("Not a valid flag. Try again (Enter a number, 1-7) ")
-            return self.playCard(flag, played_card)
-
-        # make sure the flag hasn't already been claimed
-        elif self.flag_control[flag]:
-            flag = raw_input("That flag has already been taken. Try again (Enter a number, 1-7")
-            return self.playCard(flag, played_card)
-
-        # make sure the player hasn't already played three cards there
-        elif len(currentPlayersSide) == 3:
-            flag = raw_input("You have already placed three cards there. Try again (Enter a number, 1-7")
-            return self.playCard(flag, played_card)
-        else:
-            # remove the card from the player's hand
-            self.currentPlayer.hand.remove(played_card)
-
-            currentPlayersSide.append(played_card)
-            if len(currentPlayersSide) == 3:
-                winner = self.check_flag_control(self.flags[flag])
-                if winner:
-                    self.flag_control[flag] = winner
-            return True
+        currentPlayersSide.append(played_card)
+        if len(currentPlayersSide) == 3:
+            winner = self.check_flag_control(self.flags[flag])
+            if winner:
+                self.flag_control[flag] = winner
 
     # current player draws
     # switch active player
