@@ -38,15 +38,25 @@ class Game(object):
         while not self.won:
             print "{}'s Turn".format(self.currentPlayer)
 
+
+            # flag selection
             valid_move = False
             while not valid_move:
                 flag = None
-                while not flag or flag == 'display':
+
+                while flag is None or flag == 'display':
                     flag = raw_input(
                         "Where would you like to play (Enter a flag number, 1-7)? ")
                     if flag == 'display':
                         self.display()
-                flag = int(flag) - 1
+                    else:
+                        try:
+                            flag = int(flag) - 1
+                        except ValueError:
+                            flag = None
+                            print "Flag must be a number between 1-7"
+
+                # card selection
                 played_card = ""
                 while not played_card or played_card == 'hand':
                     played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
