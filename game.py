@@ -135,9 +135,24 @@ class Game(object):
             # bugged when sides are equal
             else:
                 return self.player2
-        else:
-            # if one player has fewer than three can it be claimed?
-            pass
+
+        # does player2 beat player1's best possible side?
+        elif len(player_1_side) == 2:
+            if(self.get_side_strength(player_2_side) > (
+               self.get_best_possible_strength(player_1_side))):
+                return self.player2
+            else:
+                return None
+        # does player1 beat player2's best possible side?
+        elif len(player_2_side) == 2:
+            if(self.get_side_strength(player_1_side) > (
+               self.get_best_possible_strength(player_2_side))):
+                return self.player1
+            else:
+                return None
+
+        # still need to test 3 cards vs 1 card, reduce best possible based on cards in play
+
 
     # give side a numerical value for comparison
     def get_side_strength(self, side):
@@ -158,6 +173,21 @@ class Game(object):
 
         # is three of a kind
         elif side[0].val == side[1].val == side[2].val:
+            strength += 250
+
+        return strength
+
+    def get_best_possible_strength(self, side):
+        strength = 0
+        side.sort(key=lambda x: x.val)
+
+        for card in side:
+            strength += card.val
+        if side[1].val == side[0].val + 1:
+            strength += 100
+        elif side[0].color == side[1].color:
+            strength += 200
+        elif side[0].val == side[1].val:
             strength += 250
 
         return strength
