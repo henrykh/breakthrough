@@ -123,8 +123,8 @@ class Game(object):
     # print out the board state
     def display(self):
         print self.player1.__str__() + " | " + self.player2.__str__()
-        for flag in self.flags:
-            print flag[0].__str__() + " | " + flag[1].__str__()
+        for i, flag in enumerate(self.flags):
+            print flag[0].__str__() + " " + str(i+1) + " " + flag[1].__str__()
 
     def check_flag_control(self, flag):
         player_1_side, player_2_side = flag[0], flag[1]
