@@ -36,7 +36,7 @@ class Game(object):
 
     def run_game(self):
         while not self.won:
-            print "{}'s Turn".format(self.currentPlayer)
+            print "\n{}'s Turn".format(self.currentPlayer)
 
             # flag selection
             flag = self.flagValid()
@@ -50,12 +50,12 @@ class Game(object):
     def flagValid(self):
         flag = None
 
-        while flag is None or flag == 'display' or flag == 'hand':
+        while flag is None or flag == 'd' or flag == 'h':
             flag = raw_input(
-                "Where would you like to play (Enter a flag number 1-7 or type 'display' to show the field or 'hand' to show your hand)? ")
-            if flag == 'display':
+                "Where would you like to play (Enter a flag number 1-7 or type 'd' to display the field or 'h' to show your hand)? ")
+            if flag == 'd':
                 self.display()
-            elif flag == 'hand':
+            elif flag == 'h':
                 print self.currentPlayer.hand
             else:
                 try:
@@ -79,10 +79,12 @@ class Game(object):
 
     def cardValid(self):
         played_card = ""
-        while not played_card or played_card == 'hand':
-            played_card = raw_input("Which card would you like to play (Enter 'hand' to see your cards)? ")
-            if played_card == 'hand':
+        while not played_card or played_card == 'h' or played_card == 'd':
+            played_card = raw_input("Which card would you like to play (Enter 'h' to see your cards or 'd' to show the field)? ")
+            if played_card == 'h':
                 print self.currentPlayer.hand
+            elif played_card == 'd':
+                self.display()
             else:
                 for card in self.currentPlayer.hand:
                     if played_card.upper() == card.__str__():
@@ -104,6 +106,7 @@ class Game(object):
         if len(currentPlayersSide) == 3:
             winner = self.check_flag_control(self.flags[flag])
             if winner:
+                print winner.__str__() + " takes flag " + flag
                 self.flag_control[flag] = winner
 
     # current player draws
@@ -124,7 +127,13 @@ class Game(object):
     def display(self):
         print self.player1.__str__() + " | " + self.player2.__str__()
         for i, flag in enumerate(self.flags):
-            print flag[0].__str__() + " " + str(i+1) + " " + flag[1].__str__()
+            flag_repr = flag[0].__str__() + " " + str(i+1) + " " + flag[1].__str__()
+            if self.flag_control[i]:
+                if self.flag_control[i] == self.player1:
+                    flag_repr = "Player 1 Control " + flag_repr
+                else:
+                    flag_repr = flag_repr + " Player 2 Control"
+            print flag_repr
 
     def check_flag_control(self, flag):
         player_1_side, player_2_side = flag[0], flag[1]
